@@ -44,3 +44,19 @@ let rec fullOuter = function (v1, v2) ->
 
 let hopTrainAstate =  function (astate) ->
   fullOuter (astate, astate);;
+
+let rec addLists = function(list1, list2) ->
+  if (list1 = [] && list2 = []) then []
+    else List.hd list1 +. List.hd list2 :: addLists(List.tl list1, List.tl list2);;
+
+let rec addListOfList = function (list1, list2) ->
+  if (list1 = [] && list2 == []) then []
+    else addLists(List.hd list1, List.hd list2) :: addListOfList(List.tl list1, List.tl list2);;
+
+let rec addWeightMatrices = function (weightMatrix, allStates) ->
+  if (allStates = []) then weightMatrix
+    else addWeightMatrices(addListOfList(weightMatrix,hopTrainAstate(List.hd allStates)),List.tl allStates);;
+
+
+let hopTrain = function (allStates) ->
+  addWeightMatrices(hopTrainAstate(List.hd allStates), List.tl allStates);;

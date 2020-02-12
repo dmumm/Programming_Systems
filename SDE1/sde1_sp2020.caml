@@ -1,0 +1,46 @@
+(*functions we must develope for sde1*)
+
+(*returns the next state vector *)
+let nextState = function (currentState, weightMatrix) ->
+  if (weightMatrix == []) then []
+  else
+  hop11ActAll(netAll(currentState,weightMatrix),currentState);;
+
+(* returns network state after n time steps*)
+let rec updateN = function (currentState, weightMatrix, n) ->
+ if (n == 0) then currentState
+ else
+ updateN(nextState(currentState,weightMatrix),weightMatrix, n -1);;
+
+
+(* checks to see if two lists are equivalent*)
+(* redundant dont forget to remove *)
+ let rec checkList = function (currentState, nextState) ->
+   if currentState == [] then true
+     else if List.hd currentState == List.hd nextState then checkList(List.tl currentState, List.tl nextState)
+       else false;;
+
+(*returns true in network reaches an equilibrium state within the specified range*)
+let rec findsEquilibrium = function (initialState, weightMatrix, range) ->
+  if range == 0 then false
+    else if initialState == nextState(initialState,weightMatrix) then true
+      else findsEquilibrium(nextState(initialState,weightMatrix),weightMatrix,range - 1);;
+
+(*returns the energy of network*)
+let energy = function (state, weightMatrix) ->
+  -0.5 *. netUnit(state,netAll(state,weightMatrix));;
+
+
+let rec rowOuter = function (v1, v2) ->
+  if (v2 = []) then []
+    else if (v1 = v2) then 0.0 :: rowOuter(v1, List.tl v2)
+      else (List.hd v1 *. List.hd v2) :: rowOuter (v1, List.tl v2);;
+
+
+let rec fullOuter = function (v1, v2) ->
+  if (v1 = []) then []
+    else rowOuter (v1,v2) :: fullOuter (List.tl v1,v2);;
+
+
+let hopTrainAstate =  function (astate) ->
+  fullOuter (astate, astate);;

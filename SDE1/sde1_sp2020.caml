@@ -13,13 +13,6 @@ let rec updateN = function (currentState, weightMatrix, n) ->
  updateN(nextState(currentState,weightMatrix),weightMatrix, n -1);;
 
 
-(* checks to see if two lists are equivalent*)
-(* redundant dont forget to remove *)
- let rec checkList = function (currentState, nextState) ->
-   if currentState == [] then true
-     else if List.hd currentState == List.hd nextState then checkList(List.tl currentState, List.tl nextState)
-       else false;;
-
 (*returns true in network reaches an equilibrium state within the specified range*)
 let rec findsEquilibrium = function (initialState, weightMatrix, range) ->
   if range == 0 then false

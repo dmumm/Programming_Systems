@@ -1,4 +1,7 @@
+Prototype: nextState(currentState, weightMatrix)
+Signature: val nextState : float list * float list list -> float list = <fun>
 
+Examples:
 
 # let w = [[0.;-1.;-1.;1.];[1.;0.;1.;-1.];[-1.;-1.;0.;1.];[1.;-1.;1.;0.]];;
 val w : float list list =
@@ -13,6 +16,11 @@ val os2 : float list = [-2.; 3.; -2.; 1.]
 # nextState(os2,w);;
 - : float list = [-2.; -1.; -2.; -1.]
 
+Prototype: updateN(currentState, weightMatrix, n)
+Signature: val updateN : float list * float list list * int -> float list = <fun>
+
+Examples:
+
 # let o1 = [2.0;-1.0];;
 val o1 : float list = [2.; -1.]
 # let w1 = [[0.0;1.0];[1.0;0.0]];;
@@ -22,10 +30,21 @@ val w1 : float list list = [[0.; 1.]; [1.; 0.]]
 # updateN(o1,w1,2);;
 - : float list = [1.; -1.]
 
+Prototype: findsEquilibrium(initialState, weightMatrix, range)
+Signature: val findsEquilibrium : float list * float list list
+* int -> bool = <fun>
+
+Examples:
+
 # findsEquilibrium(os1,w,10);;
 - : bool = false
 # findsEquilibrium(o1,w1,10);;
 - : bool = false
+
+Prototype: energy(state,weightMatrix)
+Signature: val energy : float list * float list list -> float = <fun>
+
+Example:
 
 # let w2 = [[0.;1.];[1.;0.]];;
 val w2 : float list list = [[0.; 1.]; [1.; 0.]]
@@ -38,6 +57,11 @@ val o3 : float list = [2.; 3.]
 # energy(o3,w2);;
 - : float = -6.
 
+Prototype: hopTrainAstate(astate)
+Signature: val hopTrainAstate : float list -> float list list = <fun>
+
+Examples:
+
 # let a = [2.;1.;-2.];;
 val a : float list = [2.; 1.; -2.]
 # let b = [1.;2.;-1.];;
@@ -46,6 +70,11 @@ val b : float list = [1.; 2.; -1.]
 - : float list list = [[0.; 2.; -4.]; [2.; 0.; -2.]; [-4.; -2.; 0.]]
 # hopTrainAstate(b);;
 - : float list list = [[0.; 2.; -1.]; [2.; 0.; -2.]; [-1.; -2.; 0.]]
+
+Prototype: hopTrain(allStates)
+Signature: val hopTrain : float list list -> float list list = <fun>
+
+Examples:
 
 # let aStates = [[0.;-1.;1.];[-1.;1.;0.]];;
 val aStates : float list list = [[0.; -1.; 1.]; [-1.; 1.; 0.]]

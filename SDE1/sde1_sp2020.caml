@@ -1,4 +1,5 @@
-(*functions we must develope for sde1*)
+(*Cavender Holt*)
+(*This file contains functions to implement a hopfield network required for SDE1*)
 
 (*returns the next state vector *)
 let nextState = function (currentState, weightMatrix) ->
@@ -13,43 +14,48 @@ let rec updateN = function (currentState, weightMatrix, n) ->
  updateN(nextState(currentState,weightMatrix),weightMatrix, n -1);;
 
 
-(*returns true in network reaches an equilibrium state within the specified range*)
+(*returns true if network reaches an equilibrium state within the specified range*)
 let rec findsEquilibrium = function (initialState, weightMatrix, range) ->
   if range == 0 then false
     else if initialState == nextState(initialState,weightMatrix) then true
       else findsEquilibrium(nextState(initialState,weightMatrix),weightMatrix,range - 1);;
 
-(*returns the energy of network*)
+(*returns the energy of network given an input state and a weight matrix*)
 let energy = function (state, weightMatrix) ->
   -0.5 *. netUnit(state,netAll(state,weightMatrix));;
 
 
+(*performs one row of calcultion of the vector product*)
 let rec rowOuter = function (v1, v2) ->
   if (v2 = []) then []
     else if (v1 = v2) then 0.0 :: rowOuter(v1, List.tl v2)
       else (List.hd v1 *. List.hd v2) :: rowOuter (v1, List.tl v2);;
 
 
+(*calculates the outer product of two vectors*)
 let rec fullOuter = function (v1, v2) ->
   if (v1 = []) then []
     else rowOuter (v1,v2) :: fullOuter (List.tl v1,v2);;
 
-
+(*trains the hopfield network from one state*)
 let hopTrainAstate =  function (astate) ->
   fullOuter (astate, astate);;
 
+(*This function will add two lists together*)
 let rec addLists = function(list1, list2) ->
   if (list1 = [] && list2 = []) then []
     else List.hd list1 +. List.hd list2 :: addLists(List.tl list1, List.tl list2);;
 
+(*This function will add two lists of lists together*)
 let rec addListOfList = function (list1, list2) ->
   if (list1 = [] && list2 == []) then []
     else addLists(List.hd list1, List.hd list2) :: addListOfList(List.tl list1, List.tl list2);;
 
+(*This function recursively will calculate the wightMatrix with multiple states*)
 let rec addWeightMatrices = function (weightMatrix, allStates) ->
   if (allStates = []) then weightMatrix
     else addWeightMatrices(addListOfList(weightMatrix,hopTrainAstate(List.hd allStates)),List.tl allStates);;
 
-
+(*This function will train the network with n state input vectors*)
 let hopTrain = function (allStates) ->
   addWeightMatrices(hopTrainAstate(List.hd allStates), List.tl allStates);;

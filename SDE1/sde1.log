@@ -46,3 +46,12 @@ val b : float list = [1.; 2.; -1.]
 - : float list list = [[0.; 2.; -4.]; [2.; 0.; -2.]; [-4.; -2.; 0.]]
 # hopTrainAstate(b);;
 - : float list list = [[0.; 2.; -1.]; [2.; 0.; -2.]; [-1.; -2.; 0.]]
+
+# let aStates = [[0.;-1.;1.];[-1.;1.;0.]];;
+val aStates : float list list = [[0.; -1.; 1.]; [-1.; 1.; 0.]]
+# let bStates = [[1.;2.];[-2.;1.]];;
+val bStates : float list list = [[1.; 2.]; [-2.; 1.]]
+# hopTrain(aStates);;
+- : float list list = [[0.; -1.; 0.]; [-1.; 0.; -1.]; [0.; -1.; 0.]]
+# hopTrain(bStates);;
+- : float list list = [[0.; 0.]; [0.; 0.]]
